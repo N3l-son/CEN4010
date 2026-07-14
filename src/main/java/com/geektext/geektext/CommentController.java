@@ -1,4 +1,5 @@
 package com.geektext.geektext;
+import java.util.List;
 
 import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
@@ -24,5 +25,11 @@ public class CommentController {
         }
         commentRepository.save(comment);
         return ResponseEntity.ok("Comment submitted successfully");
+    }
+
+    @GetMapping("/{bookId}")
+    public ResponseEntity<List<Comment>> getCommentsByBook(@PathVariable Long bookId) {
+        List<Comment> comments = commentRepository.findByBookId(bookId);
+        return ResponseEntity.ok(comments);
     }
 }
