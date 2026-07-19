@@ -11,19 +11,32 @@ import java.util.List;
 
 public class BookController {
     @Autowired
-    private BookRepository bookRepository;
+    private BookRepository bookRepository; //doesnt use this
+    private final BookService bookService;
+
+    public BookController(BookService bookService){
+        this.bookService = bookService;
+    }
 
     @PostMapping
     public Book createBooks(@RequestBody Book book){
-        return bookRepository.save(book);
+        return bookService.createBook(book);
     }
 
     @GetMapping
-    public List<Book> getBooks(@RequestParam(required = false) String genre){
-        if(genre == null){
-            return bookRepository.findAll();
-        }
-        return bookRepository.findByGenre(genre);
+    public List<Book> getBooksByGenre(@RequestParam(required = false) String genre){
+        return bookService.getBooksByGenre(genre);
     }
+
+    @GetMapping("/top-sellers")
+    public List<Book> getTopSellers(){
+        return bookService.getTopSellers();
+    }
+
+    @GetMapping("/rating")
+    public List<Book> getBooksByRating(@RequestParam double minRating){
+        return bookService.getBooksByMinimumRating(minRating);
+    }
+
 
 }
