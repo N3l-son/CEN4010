@@ -24,11 +24,28 @@ public class UserService {
             throw new IllegalArgumentException("Username already taken");
         }
 
-        // TODO: hash password before final submission
         userRepository.save(user);
     }
 
     public Optional<User> getUser(String username) {
         return userRepository.findById(username);
     }
+
+    public void updateUser(String username, User updates) {
+        User existing = userRepository.findById(username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        if (updates.getPassword() != null && !updates.getPassword().isBlank()) {
+            existing.setPassword(updates.getPassword());
+        }
+        if (updates.getName() != null) {
+            existing.setName(updates.getName());
+        }
+        if (updates.getHomeAddress() != null) {
+            existing.setHomeAddress(updates.getHomeAddress());
+        }
+
+        userRepository.save(existing);
+    }
 }
+
