@@ -25,4 +25,13 @@ public class RatingController {
         ratingRepository.save(rating);
         return ResponseEntity.ok("Rating submitted successfully");
     }
+
+    @GetMapping("/{bookId}/average")
+    public ResponseEntity<Double> getAverageRating(@PathVariable Long bookId) {
+        Double average = ratingRepository.findAverageRatingByBookId(bookId);
+        if (average == null) {
+            return ResponseEntity.ok(0.0);
+        }
+        return ResponseEntity.ok(average);
+    }
 }
